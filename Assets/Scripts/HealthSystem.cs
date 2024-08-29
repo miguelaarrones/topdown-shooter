@@ -5,18 +5,26 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour 
 {
-    [SerializeField] private float maxHealth;
-    private float currentHealth;
+    [SerializeField] private int maxHealth;
+    private int currentHealth;
 
     private void Start()
     {
         currentHealth = maxHealth;
     }
 
-    public void DecreaseHealth(float amount)
+    public void DecreaseHealth(int amount)
     {
         currentHealth -= amount;  
     }
 
     public float GetHealth() => currentHealth;
+
+    public void IncreaseHealth(int amount)
+    {
+        if (currentHealth < maxHealth)
+        {
+            currentHealth += amount;
+        }
+    }
 }

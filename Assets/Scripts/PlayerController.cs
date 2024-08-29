@@ -16,14 +16,15 @@ public class PlayerController : MonoBehaviour
     private HealthSystem healthSystem;
 
     public float weaponRange = 20f;
-    private int ammoAmount;
+    private int currentAmmo;
     private bool canShoot = true;
     private float shootingTimer = 0f;
+    private int weaponDamage = 2;
 
     private void Start()
     {
         healthSystem = GetComponent<HealthSystem>();
-        ammoAmount = initialAmmoAmount;
+        currentAmmo = initialAmmoAmount;
     }
 
     // Update is called once per frame
@@ -49,7 +50,7 @@ public class PlayerController : MonoBehaviour
             transform.localPosition -= new Vector3(0, 0, speed * Time.deltaTime);
         }
 
-        if (Input.GetButton("Fire1") && canShoot && ammoAmount > 0)
+        if (Input.GetButton("Fire1") && canShoot && currentAmmo > 0)
         {
             Shoot();
             canShoot = false;
@@ -85,11 +86,12 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
-
     }
 
     private void Shoot()
     {
+        currentAmmo--;
+
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
@@ -100,11 +102,33 @@ public class PlayerController : MonoBehaviour
             targetPoint = hit.point;
 
             Debug.Log(hit.collider.name);
+
+            Enemy enemy = hit.collider.GetComponent<Enemy>(); // Should exist always. We are hitting only enemy layer mask
+            enemy.ReceiveDamage(weaponDamage);
+
+            Debug.Log(hit.collider.name);
         }
     }
 
     private void Die()
     {
         Debug.Log("Player Died!");
+    }
+
+    public void AddAmmo(int amount)
+    {
+        if (currentAmmo < initialAmmoAmount)
+        {
+            currentAmmo += amount;
+        }
+    }
+    public void AddHealth(int amount)
+    {
+        healthSystem.IncreaseHealth(amount);
+    }
+
+    public void AddCoins(int amount)
+    {
+        Debug.Log("COIN");
     }
 }
