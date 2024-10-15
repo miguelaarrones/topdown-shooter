@@ -131,4 +131,14 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("COIN");
     }
+    
+    public float GetHealth()
+    {
+        return healthSystem.GetHealth();
+    }
+
+    public float GetCurrentAmmo()
+    {
+        return currentAmmo;
+    }
 }
